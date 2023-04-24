@@ -1,2 +1,1 @@
-# awsx-s3
-AWS s3 extension
+This repo is for aws ecs extension
