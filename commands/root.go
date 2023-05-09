@@ -9,7 +9,6 @@ import (
 
 	"github.com/Appkube-awsx/awsx-s3/authenticater"
 	"github.com/Appkube-awsx/awsx-s3/client"
-	"github.com/Appkube-awsx/awsx-s3/commands/s3cmd"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -71,11 +70,6 @@ func Execute() {
 }
 
 func init() {
-	AwsxS3Cmd.AddCommand(s3cmd.GetCostDataCmd)
-	s3cmd.GetCostDataCmd.Flags().String("granularity", "DAILY", "Granularity of cost data (DAILY, WEEKLY, MONTHLY)")
-
-	AwsxS3Cmd.AddCommand(s3cmd.GetCostSpikeCmd)
-	s3cmd.GetCostSpikeCmd.Flags().String("granularity", "DAILY", "Granularity of cost data (DAILY, WEEKLY, MONTHLY)")
 
 	// Register command with root command
 	//AwsxS3Cmd.AddCommand(GetCostDataCmd)
