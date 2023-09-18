@@ -3,6 +3,7 @@ module github.com/Appkube-awsx/awsx-s3
 go 1.19
 
 require (
+	github.com/Appkube-awsx/awsx-common v1.1.9
 	github.com/aws/aws-sdk-go v1.44.213
 	github.com/spf13/cobra v1.6.1
 )
