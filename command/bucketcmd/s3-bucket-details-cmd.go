@@ -44,9 +44,10 @@ func GetBucketDetails(bucketName string, auth client.Auth) (*s3.ListObjectsV2Out
 	bucketDetailsResponse, err := listbucketClient.ListObjectsV2(input)
 	log.Println(bucketDetailsResponse.String())
 	if err != nil {
-		log.Fatalln("Error:", err)
+		log.Println("Error:", err)
 		return nil, err
 	}
+
 	return bucketDetailsResponse, nil
 }
 
