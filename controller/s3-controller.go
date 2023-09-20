@@ -36,7 +36,16 @@ func GetS3BucketListByFlagAndClientAuth(authFlag bool, clientAuth *client.Auth, 
 }
 
 func GetS3BucketList(clientAuth *client.Auth) ([]*s3.ListObjectsV2Output, error) {
-	response, err := command.GetListBucket(*clientAuth)
+	response, err := command.GetListBucketWithBucketDetail(*clientAuth)
+	if err != nil {
+		log.Println(err.Error())
+		return nil, err
+	}
+	return response, nil
+}
+
+func GetBucketList(clientAuth *client.Auth) (*s3.ListBucketsOutput, error) {
+	response, err := command.GetBucketList(*clientAuth)
 	if err != nil {
 		log.Println(err.Error())
 		return nil, err

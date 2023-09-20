@@ -26,7 +26,7 @@ var AwsxS3Cmd = &cobra.Command{
 			return
 		}
 		if authFlag {
-			GetListBucket(*clientAuth)
+			GetBucketList(*clientAuth)
 		} else {
 			cmd.Help()
 			return
@@ -35,8 +35,7 @@ var AwsxS3Cmd = &cobra.Command{
 	},
 }
 
-// json.Unmarshal
-func GetListBucket(auth client.Auth) ([]*s3.ListObjectsV2Output, error) {
+func GetListBucketWithBucketDetail(auth client.Auth) ([]*s3.ListObjectsV2Output, error) {
 	log.Println("getting s3 bucket list")
 
 	client := client.GetClient(auth, client.S3_CLIENT).(*s3.S3)
@@ -56,6 +55,20 @@ func GetListBucket(auth client.Auth) ([]*s3.ListObjectsV2Output, error) {
 	}
 	log.Println(allBuckets)
 	return allBuckets, err
+}
+
+func GetBucketList(auth client.Auth) (*s3.ListBucketsOutput, error) {
+	log.Println("getting s3 bucket list")
+
+	client := client.GetClient(auth, client.S3_CLIENT).(*s3.S3)
+	request := &s3.ListBucketsInput{}
+	response, err := client.ListBuckets(request)
+	if err != nil {
+		log.Fatalln("Error:in getting  bucket list", err)
+
+	}
+	log.Println(response)
+	return response, err
 }
 
 func Execute() {
