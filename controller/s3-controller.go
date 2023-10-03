@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"github.com/Appkube-awsx/awsx-common/authenticate"
 	"github.com/Appkube-awsx/awsx-common/client"
 	"github.com/Appkube-awsx/awsx-s3/command"
@@ -44,13 +45,16 @@ func GetS3BucketList(clientAuth *client.Auth) ([]*s3.ListObjectsV2Output, error)
 	return response, nil
 }
 
-func GetBucketList(clientAuth *client.Auth) (*s3.ListBucketsOutput, error) {
+func GetBucketList(clientAuth *client.Auth) (string, error) {
 	response, err := command.GetBucketList(*clientAuth)
 	if err != nil {
 		log.Println(err.Error())
-		return nil, err
+		return "", err
 	}
-	return response, nil
+	jsonData, err := json.Marshal(response)
+	log.Println(string(jsonData))
+	return string(jsonData), err
+	//return response, nil
 }
 
 func GetS3BucketDetails(bucketName string, clientAuth *client.Auth) (*s3.ListObjectsV2Output, error) {

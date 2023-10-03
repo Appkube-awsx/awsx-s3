@@ -11,6 +11,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type S3Bucket struct {
+	Bucket interface{} `json:"bucket"`
+	Tags   interface{} `json:"tags"`
+}
+
 var AwsxS3Cmd = &cobra.Command{
 	Use:   "getS3BucketList",
 	Short: "getS3BucketList command gets list of S3 buckets",
@@ -57,18 +62,33 @@ func GetListBucketWithBucketDetail(auth client.Auth) ([]*s3.ListObjectsV2Output,
 	return allBuckets, err
 }
 
-func GetBucketList(auth client.Auth) (*s3.ListBucketsOutput, error) {
+func GetBucketList(auth client.Auth) ([]S3Bucket, error) {
 	log.Println("getting s3 bucket list")
 
 	client := client.GetClient(auth, client.S3_CLIENT).(*s3.S3)
 	request := &s3.ListBucketsInput{}
 	response, err := client.ListBuckets(request)
 	if err != nil {
-		log.Fatalln("Error:in getting  bucket list", err)
-
+		log.Println("Error:in getting  bucket list", err)
 	}
-	log.Println(response)
-	return response, err
+	allBuckets := []S3Bucket{}
+	for _, bucket := range response.Buckets {
+		input := &s3.GetBucketTaggingInput{
+			Bucket: bucket.Name,
+		}
+		tagOutput, err := client.GetBucketTagging(input)
+		if err != nil {
+			log.Println("Error in getting bucket tag", err)
+			continue
+		}
+		s3Bucket := S3Bucket{
+			Bucket: bucket,
+			Tags:   tagOutput,
+		}
+		allBuckets = append(allBuckets, s3Bucket)
+	}
+	log.Println(allBuckets)
+	return allBuckets, err
 }
 
 func Execute() {
