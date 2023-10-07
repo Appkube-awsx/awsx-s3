@@ -108,14 +108,17 @@ func S3BucketWithTagsController(bucketName string, auth client.Auth) (string, er
 		Bucket: aws.String(bucketName),
 	}
 	tagOutput, err := client.GetBucketTagging(input)
+	s3Bucket := bucketcmd.S3Bucket{}
 	if err != nil {
 		log.Println("Error in getting bucket tag: ", err)
-		return "", err
+		newTag := map[string]interface{}{"tags": map[string]interface{}{}}
+		s3Bucket.Bucket = bucketDetail
+		s3Bucket.Tags = newTag
+	} else {
+		s3Bucket.Bucket = bucketDetail
+		s3Bucket.Tags = tagOutput
 	}
-	s3Bucket := bucketcmd.S3Bucket{
-		Bucket: bucketDetail,
-		Tags:   tagOutput,
-	}
+
 	jsonData, err := json.Marshal(s3Bucket)
 	if err != nil {
 		log.Println("Error in json marshal of bucket: ", err)
