@@ -111,7 +111,7 @@ func S3BucketWithTagsController(bucketName string, auth client.Auth) (string, er
 	s3Bucket := bucketcmd.S3Bucket{}
 	if err != nil {
 		log.Println("Error in getting bucket tag: ", err)
-		newTag := map[string]interface{}{"tags": map[string]interface{}{}}
+		newTag := map[string]interface{}{}
 		s3Bucket.Bucket = bucketDetail
 		s3Bucket.Tags = newTag
 	} else {
